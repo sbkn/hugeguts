@@ -8,4 +8,4 @@
 (see https://medium.com/@edkins.sarah/set-up-sdl2-on-your-mac-without-xcode-6b0c33b723f7)
 
 ## Compile & run:
-`make game && ./p`
+`make game && ./play`
