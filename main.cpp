@@ -4,16 +4,17 @@ using namespace std;
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
+#define FPS 60
 
 //Main loop flag
-bool quit = false;
+bool quitGame = false;
 //Event handler
-SDL_Event e;
+SDL_Event event;
 
 int main()
 {
-	cout << "Hello World!"
-		 << "\n";
+	std::cout << "Hello World!"
+			  << "\n";
 	;
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -56,20 +57,27 @@ int main()
 		return 1;
 	}
 
-	/* LOOP */
-	while (!quit)
+	int frames_drawn = 0;
+	Uint32 frameStart = 0;
+
+	/* GAME LOOP */
+	while (!quitGame)
 	{
-		while (SDL_PollEvent(&e) != 0)
+		frameStart = SDL_GetTicks();
+
+		while (SDL_PollEvent(&event) != 0)
 		{
-			//User requests quit
-			if (e.type == SDL_QUIT)
+			switch (event.type)
 			{
-				quit = true;
+				case SDL_QUIT:
+					quitGame = true;
+					break;
+				default:
+					break;
 			}
 		}
-		//First clear the renderer
+
 		SDL_RenderClear(ren);
-		//Draw the texture
 		SDL_RenderCopy(ren, tex, NULL, NULL);
 
 		SDL_Rect rect;
@@ -81,8 +89,14 @@ int main()
 
 		//Update the screen
 		SDL_RenderPresent(ren);
-		//Take a quick break after all that hard work
-		//SDL_Delay(3000);
+
+		/*	HANDLE THE FPS:	*/
+		frames_drawn++;
+		/*	Sleep to keep the FPS as defined:	*/
+		if ((1000 / FPS) > (SDL_GetTicks() - frameStart))
+		{
+			SDL_Delay((1000 / FPS) - (SDL_GetTicks() - frameStart));
+		}
 	}
 
 	SDL_DestroyTexture(tex);
@@ -90,8 +104,8 @@ int main()
 	SDL_DestroyWindow(win);
 	SDL_Quit();
 
-	cout << "Bye World!"
-		 << "\n";
+	std::cout << "Bye World!"
+			  << "\n";
 
 	return 0;
 }
