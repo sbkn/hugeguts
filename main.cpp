@@ -93,9 +93,10 @@ int main()
 		/*	HANDLE THE FPS:	*/
 		frames_drawn++;
 		/*	Sleep to keep the FPS as defined:	*/
-		if ((1000 / FPS) > (SDL_GetTicks() - frameStart))
+		int frameHandlingMs = (SDL_GetTicks() - frameStart);
+		if ((1000 / FPS) > frameHandlingMs)
 		{
-			SDL_Delay((1000 / FPS) - (SDL_GetTicks() - frameStart));
+			SDL_Delay((1000 / FPS) - frameHandlingMs);
 		}
 	}
 
